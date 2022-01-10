@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
 
-function App() {
-    const [counter, setCounter] = useState(0);
-    const [text, setText] = useState("");
-    const onClick = () => setCounter((cur) => cur + 1);
-    const onChange = (event) => setText(event.target.value);
-    console.log("Always Renderd");
+function Hello() {
     useEffect(() => {
-        console.log("only once");
+        console.log("created!");
+        return () => console.log("destroyed!");
     }, []);
-    useEffect(() => {
-        console.log("only counter");
-    }, [counter]);
-    useEffect(() => {
-        console.log("only text");
-    }, [text]);
+    return <h1>HelloWorld!</h1>;
+}
+
+/**
+ *  clear up function 
+    component가 없어지거나 사라질 때 따로 뭔가를 실행시키는 함수
+    해당 함수를 통해 언제 create 되고  destroyed 되는지 확인할 수 있음.
+ */
+
+function App() {
+    const [show, setShow] = useState(0);
+    const onClick = () => setShow((cur) => !cur);
     return (
         <div>
-            <input type="text" value={text} onChange={onChange} />
-            <p>{counter}</p>
-            <button onClick={onClick}>add Count</button>
+            {show ? <Hello /> : null}
+            <button onClick={onClick}>{show ? "disappear" : "show"}</button>
         </div>
     );
 }
