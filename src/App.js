@@ -1,26 +1,34 @@
-import { useState, useEffect } from "react";
-
-function Hello() {
-    useEffect(() => {
-        console.log("created!");
-        return () => console.log("destroyed!");
-    }, []);
-    return <h1>HelloWorld!</h1>;
-}
-
-/**
- *  clear up function 
-    component가 없어지거나 사라질 때 따로 뭔가를 실행시키는 함수
-    해당 함수를 통해 언제 create 되고  destroyed 되는지 확인할 수 있음.
- */
+import { useState } from "react";
 
 function App() {
-    const [show, setShow] = useState(0);
-    const onClick = () => setShow((cur) => !cur);
+    const EMPTY = "";
+    const [toDo, setToDo] = useState("");
+    const [toDos, setToDos] = useState([]);
+    const onChange = (e) => setToDo(e.target.value);
+    const onSubmit = (e) => {
+        e.preventDefault();
+        if (toDo === EMPTY) return;
+        setToDos((cur) => [toDo, ...cur]);
+        setToDo(EMPTY);
+    };
     return (
         <div>
-            {show ? <Hello /> : null}
-            <button onClick={onClick}>{show ? "disappear" : "show"}</button>
+            <h1>ToDos({toDos.length})</h1>
+            <form onSubmit={onSubmit}>
+                <input
+                    type="text"
+                    value={toDo}
+                    onChange={onChange}
+                    placeholder="Write ToDo"
+                />
+                <button>add ToDo</button>
+            </form>
+            <hr />
+            <ul>
+                {toDos.map((element, idx) => (
+                    <li key={idx}>{element}</li>
+                ))}
+            </ul>
         </div>
     );
 }
